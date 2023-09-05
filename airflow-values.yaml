@@ -1,0 +1,4 @@
+airflow:
+  image:
+    repository: cgrelik/airflow_spark_demo
+    tag: latest

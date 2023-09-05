@@ -1,0 +1,33 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: airflow-spark
+  namespace: spark-demo
+subjects:
+- kind: ServiceAccount
+  name: airflow-sparkdemo
+  namespace: spark-demo
+roleRef:
+  kind: Role
+  name: spark-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: airflow-spark-operator
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-delete-policy": hook-failed, before-hook-creation
+    "helm.sh/hook-weight": "-10"
+subjects:
+  - kind: ServiceAccount
+    name: airflow-sparkdemo
+    namespace: spark-demo
+roleRef:
+  kind: ClusterRole
+  name: spark-operator
+  apiGroup: rbac.authorization.k8s.io
